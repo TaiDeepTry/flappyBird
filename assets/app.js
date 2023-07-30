@@ -239,16 +239,16 @@ function birdJump(e) {
     // Kiểm tra xem hàm birdJump đã được thực thi từ trước hay chưa
     if (!birdJumpExecuted && (e.code === "Space" || e.code === "ArrowUp" || e.type === "click" || e.type === "touchstart")) {
         // Đánh dấu rằng hàm birdJump đã được thực thi
-        birdJumpExecuted = true;
+        // birdJumpExecuted = true;
 
         velocityY = -6;
         birdRotation = -40;
         drawRotatedBird();
 
         // Đặt thời gian trễ để cho phép hàm birdJump được thực thi một lần nữa sau khoảng thời gian nhất định
-        setTimeout(() => {
-            birdJumpExecuted = false;
-        }, 500); // Thời gian trễ 100ms (có thể điều chỉnh thời gian này nếu cần)
+        // setTimeout(() => {
+        //     birdJumpExecuted = false;
+        // }, 500); // Thời gian trễ 100ms (có thể điều chỉnh thời gian này nếu cần)
     } 
 }
 function handleCanvasClick(event) {
