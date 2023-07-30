@@ -1,7 +1,7 @@
-@import url(./fonts/flappy-font.ttf.woff);
+@import url(./fonts/flappy-font.ttf);
 
 body{
-    font-family: 'Flappy-Bird-Regular';
+    font-family: '04b_19';
     text-align: center;
     overflow: hidden;
 }
