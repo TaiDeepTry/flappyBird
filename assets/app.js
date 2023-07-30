@@ -156,7 +156,7 @@ function update() {
     birdRotation += 1.5;
     velocityY += gravity;
     bird.y = Math.max(bird.y + velocityY, 0)
-    drawRotatedBird();
+    drawRotatedBird();   
     
     if (bird.y > board.height / 8 * 7) {
         gameOver = true;
@@ -285,7 +285,10 @@ function drawBoard() {
         width : playAgainWidth,
         height : playAgainHeight
     }
-
+    // context.globalAlpha = 0.1;
+    // context.fillStyle = "black"
+    // context.fillRect(0, 0, boardWidth, boardHeight);
+    // context.globalAlpha = 1;
     context.drawImage(overImg, over.x, over.y, over.width, over.height);
     context.drawImage(overTextImg, overTextX, overTextY, overTextWidth, overTextHeight);
     context.drawImage(medalImg, medal.x, medal.y, medal.width, medal.height);
@@ -305,11 +308,10 @@ function detectCollision(bird, pipe) {
         bird.y + bird.height > pipe.y;
 }
 
-
 function drawRotatedBird() {
     context.save();
     context.translate(bird.x + bird.width / 2, bird.y + bird.height / 2);
     context.rotate(birdRotation * Math.PI / 180);
-    context.drawImage(birdImg, -bird.width / 2, -bird.height / 2, bird.width, bird.height);
+    context.drawImage(birdImg, -bird.width / 2, -bird.height / 2, bird.width, bird.height);  
     context.restore();
 }
