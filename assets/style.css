@@ -1,12 +1,13 @@
+@import url(./fonts/flappy-font.ttf.woff);
+
 body{
     font-family: 'Flappy-Bird-Regular';
     text-align: center;
     overflow: hidden;
 }
-
 #board{
     background-image: url("./images/flappybirdbg.png");
     background-repeat: no-repeat;
     background-size: contain;
-    image-rendering: pixelated;
+    /* image-rendering: pixelated; */
 }
