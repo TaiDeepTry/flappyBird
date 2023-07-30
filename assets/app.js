@@ -72,8 +72,6 @@ let gravity = 0.3;
 let gameOver = false;
 let score = 0;
 
-let birdJumpExecuted = false;
-
 window.onload = function () {
     // board
     board = document.getElementById("board");
@@ -134,12 +132,12 @@ window.onload = function () {
     playAgainImg = new Image();
     playAgainImg.src = "./assets/images/playbutton.png";
 
-    requestAnimationFrame(update);
     setInterval(placePipe, 1500);
     document.addEventListener("keydown", birdJump);
     document.addEventListener("click", birdJump);
     document.addEventListener("touchstart", birdJump);
     board.addEventListener("click", handleCanvasClick);
+    requestAnimationFrame(update);
 }
 
 function update() {
@@ -236,21 +234,13 @@ function placePipe() {
 }
 
 function birdJump(e) {
-    // Kiểm tra xem hàm birdJump đã được thực thi từ trước hay chưa
-    if (!birdJumpExecuted && (e.code === "Space" || e.code === "ArrowUp" || e.type === "click" || e.type === "touchstart")) {
-        // Đánh dấu rằng hàm birdJump đã được thực thi
-        // birdJumpExecuted = true;
-
+    if ((e.code === "Space" || e.code == "ArrowUp" || e.type === "click" || e.type === "touchstart")) {
         velocityY = -6;
         birdRotation = -40;
         drawRotatedBird();
-
-        // Đặt thời gian trễ để cho phép hàm birdJump được thực thi một lần nữa sau khoảng thời gian nhất định
-        // setTimeout(() => {
-        //     birdJumpExecuted = false;
-        // }, 500); // Thời gian trễ 100ms (có thể điều chỉnh thời gian này nếu cần)
     } 
 }
+
 function handleCanvasClick(event) {
     // Lấy tọa độ của điểm click trên canvas
     const rect = board.getBoundingClientRect();
@@ -314,7 +304,6 @@ function detectCollision(bird, pipe) {
         bird.y < pipe.y + pipe.height &&
         bird.y + bird.height > pipe.y;
 }
-
 
 
 function drawRotatedBird() {
