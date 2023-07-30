@@ -248,7 +248,7 @@ function birdJump(e) {
         // Đặt thời gian trễ để cho phép hàm birdJump được thực thi một lần nữa sau khoảng thời gian nhất định
         setTimeout(() => {
             birdJumpExecuted = false;
-        }, 100); // Thời gian trễ 100ms (có thể điều chỉnh thời gian này nếu cần)
+        }, 500); // Thời gian trễ 100ms (có thể điều chỉnh thời gian này nếu cần)
     } 
 }
 function handleCanvasClick(event) {
