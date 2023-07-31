@@ -235,7 +235,8 @@ function placePipe() {
 }
 
 function birdJump(e) {
-    if ((e.code === "Space" || e.code == "ArrowUp" || e.type === "click" || e.type === "touchstart") && gameOver == false) {
+    if ((e.code === "Space" || e.code == "ArrowUp" || e.type === "click" ) && gameOver == false) {
+        //|| e.type === "touchstart"
         velocityY = -6;
         birdRotation = -40;
         drawRotatedBird();
