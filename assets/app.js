@@ -3,8 +3,7 @@ let board;
 let boardHeight = 640;
 let boardWidth = 360;
 let context;
-let count = document.getElementById("count");
-let counts = 0
+
 
 // bird
 let birdWidth = 34;
@@ -236,12 +235,9 @@ function placePipe() {
 
 function birdJump(e) {
     if ((e.code === "Space" || e.code == "ArrowUp" || e.type === "touchstart" ) && gameOver == false) {
-        //  
         velocityY = -6;
         birdRotation = -40;
         drawRotatedBird();
-        counts += 1
-        count.textContent = counts;
     } 
 }
 
@@ -260,6 +256,7 @@ function handleCanvasClick(event) {
             score = 0;
             gameOver = false;
             counts = 0; 
+            velocityY = 0;
         }
     }
 }
