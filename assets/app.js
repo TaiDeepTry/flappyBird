@@ -3,7 +3,8 @@ let board;
 let boardHeight = 640;
 let boardWidth = 360;
 let context;
-
+let count = document.getElementById("count");
+let counts = 0
 
 // bird
 let birdWidth = 34;
@@ -78,7 +79,7 @@ window.onload = function () {
     board.height = boardHeight;
     board.width = boardWidth;
     context = board.getContext("2d");
-    context.imageSmoothingEnabled = false;
+    // context.imageSmoothingEnabled = false;
 
     // draw bird
     birdImg = new Image();
@@ -183,8 +184,8 @@ function update() {
     }
 
     groundX += velocityX
-    context.drawImage(groundImg, groundX, groundY, boardWidth, boardHeight / 8)
-    context.drawImage(groundImg2, groundX + boardWidth, groundY, boardWidth, boardHeight / 8)
+    context.drawImage(groundImg, groundX, groundY, boardWidth, boardHeight / 8);
+    context.drawImage(groundImg2, groundX + boardWidth, groundY, boardWidth, boardHeight / 8);
 
     if (groundX + boardWidth < 0) {
         groundX = 0
@@ -234,10 +235,12 @@ function placePipe() {
 }
 
 function birdJump(e) {
-    if ((e.code === "Space" || e.code == "ArrowUp" || e.type === "click" || e.type === "touchstart")) {
+    if ((e.code === "Space" || e.code == "ArrowUp" || e.type === "click" || e.type === "touchstart") && gameOver == false) {
         velocityY = -6;
         birdRotation = -40;
         drawRotatedBird();
+        counts += 1
+        count.textContent = counts;
     } 
 }
 
@@ -255,12 +258,12 @@ function handleCanvasClick(event) {
             pipesArray = [];
             score = 0;
             gameOver = false;
+            counts = 0; 
         }
     }
 }
 
 function drawBoard() {
-
     over = {
         x: overX,
         y: overY,
@@ -312,6 +315,7 @@ function drawRotatedBird() {
     context.save();
     context.translate(bird.x + bird.width / 2, bird.y + bird.height / 2);
     context.rotate(birdRotation * Math.PI / 180);
+    board.style.imageEendering = 'auto';
     context.drawImage(birdImg, -bird.width / 2, -bird.height / 2, bird.width, bird.height);  
     context.restore();
 }
