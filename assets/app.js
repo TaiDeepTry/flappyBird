@@ -78,7 +78,7 @@ window.onload = function () {
     board.height = boardHeight;
     board.width = boardWidth;
     context = board.getContext("2d");
-    // context.imageSmoothingEnabled = false;
+    context.imageSmoothingEnabled = false;
 
     // draw bird
     birdImg = new Image();
