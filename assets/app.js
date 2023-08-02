@@ -18,16 +18,13 @@ let bird = {
     width: birdWidth,
     height: birdHeight
 }
-let flapState = 1;
-let flapTimer = 0
-const FLAP_INTERVAL = 10;
 
 
 // pipes
 let pipesArray = [];
 let pipeWidth = 64;
 let pipeHeight = 412;
-let pipeX = boardWidth;
+let pipeX = 0 - pipeWidth;
 let pipeY = 0;
 let topPipeImg;
 let bottomPipeImg;
@@ -35,6 +32,7 @@ let bottomPipeImg;
 //ground
 let groundsArray = [];
 let groundImg;
+let groundImg2;
 let groundX = 0;
 let groundY = boardHeight / 8 * 7;
 
@@ -65,12 +63,17 @@ let playAgainWidth = 130;
 let playAgainHeight = 72.5;
 let playAgainX = boardWidth / 2 - playAgainWidth / 2;
 let playAgainY = boardHeight / 2 + 100;
+let play = false;
 
 let velocityY = 0;
 let velocityX = -2;
 let gravity = 0.3;
 let gameOver = false;
 let score = 0;
+let timmer = 0.8;
+let flappingStatus = 10;
+
+let jumpSound = new Audio("./assets/sound/jump.mp3")
 
 window.onload = function () {
     // board
@@ -78,7 +81,6 @@ window.onload = function () {
     board.height = boardHeight;
     board.width = boardWidth;
     context = board.getContext("2d");
-    // context.imageSmoothingEnabled = false;
 
     // draw bird
     birdImg = new Image();
@@ -132,9 +134,9 @@ window.onload = function () {
     playAgainImg = new Image();
     playAgainImg.src = "./assets/images/playbutton.png";
 
-    setInterval(placePipe, 1500);
+    // placePipe();
+    setInterval(placePipe, 1800);
     document.addEventListener("keydown", birdJump);
-    document.addEventListener("click", birdJump);
     document.addEventListener("touchstart", birdJump);
     board.addEventListener("click", handleCanvasClick);
     requestAnimationFrame(update);
@@ -143,8 +145,9 @@ window.onload = function () {
 function update() {
 
     requestAnimationFrame(update);
-
+    
     if (gameOver) {
+        play = false;
         drawBoard();
         return;
     }
@@ -152,15 +155,18 @@ function update() {
 
     context.clearRect(0, 0, boardWidth, boardHeight);
 
-    // draw bird
-    birdRotation += 1.5;
-    velocityY += gravity;
-    bird.y = Math.max(bird.y + velocityY, 0)
-    drawRotatedBird();   
-    
+
+    // neu chim cham san thi thua
     if (bird.y > board.height / 8 * 7) {
         gameOver = true;
     }
+
+    // draw bird
+    if (!play) {
+    flappingBird(bird.x, bird.y, bird.width, bird.height);
+    }
+    drawBird(play);
+
 
     // draw pipe
     pipesArray.forEach(element => {
@@ -172,9 +178,9 @@ function update() {
             element.passed = true;
         }
 
-
         if (detectCollision(bird, element)) {
             gameOver = true;
+            play = false;
         }
     });
 
@@ -191,14 +197,37 @@ function update() {
     }
     context.fillStyle = "black";
     context.font = "45px '04b_19'";
-    context.fillText(score, (boardWidth/2 - 45 / 2) + 2, 48);
+    context.fillText(score, (boardWidth / 2 - 45 / 2) + 2, 48);
     context.fillStyle = "white";
     context.font = "45px '04b_19'";
-    context.fillText(score, boardWidth/2 - 45 / 2, 46);
+    context.fillText(score, boardWidth / 2 - 45 / 2, 46);
     context.font = "10px '04b_19'";
     context.fillStyle = "black";
-    context.fillText("© 2023 Nguyen Tuan Tai Dep Trai VCL. All rights reserved.", boardWidth / 9, boardHeight / 20 * 19); 
-    
+    context.fillText("© 2023 Nguyen Tuan Tai Dep Trai VCL. All rights reserved.", boardWidth / 9, boardHeight / 20 * 19);
+
+}
+function drawBird(isPlay) {
+    if (isPlay) {
+        birdRotation += 1.5;
+        velocityY += gravity;
+        bird.y = Math.max(bird.y + velocityY, 0);
+        drawRotatedBird();
+    }
+}
+
+
+function flappingBird(x, y, width, height){
+    flappingStatus += timmer;
+    if(0 <= flappingStatus && flappingStatus < 10){
+        context.drawImage(birdImg1, x, y, width, height);
+    }else if( 10 <= flappingStatus && flappingStatus < 20){
+        context.drawImage(birdImg2, x, y, width, height);
+    }else if (flappingStatus >= 20 && flappingStatus <= 30){
+        context.drawImage(birdImg3, x, y, width, height);
+    }else{
+        context.drawImage(birdImg1, x, y, width, height);
+        flappingStatus = 0;
+    }
 }
 
 function placePipe() {
@@ -206,6 +235,11 @@ function placePipe() {
     if (gameOver) {
         drawBoard();
         return;
+    }
+    if(play){
+        pipeX = boardWidth; 
+    }else{
+        score = -1;    
     }
 
     let randomPipeY = pipeY - pipeHeight / 4 - Math.random(0.4, 0, 6) * (pipeHeight / 2);
@@ -229,16 +263,20 @@ function placePipe() {
         height: pipeHeight,
         passed: false
     }
+
     pipesArray.push(bottomPipe);
 
 }
 
 function birdJump(e) {
-    if ((e.code === "Space" || e.code == "ArrowUp" || e.type === "touchstart" ) && gameOver == false) {
+    if ((e.code === "Space" || e.code == "ArrowUp" || e.type === "touchstart") && gameOver == false) {
         velocityY = -6;
         birdRotation = -40;
         drawRotatedBird();
-    } 
+        play = true;
+        jumpSound.currentTime = 0;
+        jumpSound.play();
+    }
 }
 
 function handleCanvasClick(event) {
@@ -255,8 +293,13 @@ function handleCanvasClick(event) {
             pipesArray = [];
             score = 0;
             gameOver = false;
-            counts = 0; 
+            play = false;
             velocityY = 0;
+            if(play){
+                pipeX = boardWidth; 
+            }else{
+                score = 0;    
+            }
         }
     }
 }
@@ -269,34 +312,30 @@ function drawBoard() {
         height: overHeight
     }
     overText = {
-        x : overTextX,
-        y : overTextY,
-        width : overTextWidth,
-        height : overTextHeight
+        x: overTextX,
+        y: overTextY,
+        width: overTextWidth,
+        height: overTextHeight
     }
     medal = {
-        x : medalX,
-        y : medalY,
-        width : medalWidth,
-        height : medalHeight
+        x: medalX,
+        y: medalY,
+        width: medalWidth,
+        height: medalHeight
     }
     playAgain = {
-        x : playAgainX,
-        y : playAgainY,
-        width : playAgainWidth,
-        height : playAgainHeight
+        x: playAgainX,
+        y: playAgainY,
+        width: playAgainWidth,
+        height: playAgainHeight
     }
-    // context.globalAlpha = 0.1;
-    // context.fillStyle = "black"
-    // context.fillRect(0, 0, boardWidth, boardHeight);
-    // context.globalAlpha = 1;
     context.drawImage(overImg, over.x, over.y, over.width, over.height);
     context.drawImage(overTextImg, overTextX, overTextY, overTextWidth, overTextHeight);
     context.drawImage(medalImg, medal.x, medal.y, medal.width, medal.height);
     context.strokeStyle = "black";
     context.lineWidth = 3;
     context.fillStyle = "white";
-    context.font = "25px '04b_19'"; 
+    context.font = "25px '04b_19'";
     context.strokeText(score, boardWidth / 2 + 100, boardHeight / 2 - 13);
     context.fillText(score, boardWidth / 2 + 100, boardHeight / 2 - 13);
     context.drawImage(playAgainImg, playAgain.x, playAgain.y, playAgain.width, playAgain.height);
@@ -314,6 +353,6 @@ function drawRotatedBird() {
     context.translate(bird.x + bird.width / 2, bird.y + bird.height / 2);
     context.rotate(birdRotation * Math.PI / 180);
     board.style.imageEendering = 'auto';
-    context.drawImage(birdImg, -bird.width / 2, -bird.height / 2, bird.width, bird.height);  
+    flappingBird(-bird.width / 2, -bird.height / 2, bird.width, bird.height);// context.drawImage(birdImg, -bird.width / 2, -bird.height / 2, bird.width, bird.height);
     context.restore();
 }
