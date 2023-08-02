@@ -273,12 +273,12 @@ function placePipe() {
 
 function birdJump(e) {
     if ((e.code === "Space" || e.code == "ArrowUp" || e.type === "touchstart") && gameOver == false) {
+        jumpSound.play();
         velocityY = -6;
         birdRotation = -40;
         drawRotatedBird();
         play = true;
         jumpSound.currentTime = 0;
-        jumpSound.play();
     }
 }
 
