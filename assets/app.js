@@ -73,7 +73,7 @@ let score = 0;
 let timmer = 0.8;
 let flappingStatus = 10;
 
-let jumpSound = new Audio("./assets/sound/jump.mp3")
+let jumpSound;
 
 window.onload = function () {
     // board
@@ -130,6 +130,9 @@ window.onload = function () {
 
     medalImg = new Image();
     medalImg.src = "./assets/images/goldmedal.png";
+
+    jumpSound = new Audio();
+    jumpSound.src = "./assets/sound/jump.mp3";
 
     playAgainImg = new Image();
     playAgainImg.src = "./assets/images/playbutton.png";
