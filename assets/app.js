@@ -257,12 +257,12 @@ function update() {
     }
 
     context.fillStyle = "black";
-    context.font = "45px '04b_19'";
+    context.font = "45px 'Flappy-Bird-Regular'";
     context.fillText(score, (boardWidth / 2 - 45 / 2) + 2, 48);
     context.fillStyle = "white";
-    context.font = "45px '04b_19'";
+    context.font = "45px 'Flappy-Bird-Regular'";
     context.fillText(score, boardWidth / 2 - 45 / 2, 46);
-    context.font = "10px '04b_19'";
+    context.font = "10px 'Flappy-Bird-Regular'";
     context.fillStyle = "black";
     context.fillText("© 2023 Nguyen Tuan Tai Dep Trai VCL. All rights reserved.", boardWidth / 9, boardHeight / 20 * 19);
 
