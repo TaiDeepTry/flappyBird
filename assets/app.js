@@ -218,6 +218,7 @@ function increaseSpeed(){
 }
 
 function drawHomeScreen() {
+    themeSong.play();
     if (inHomeScreen) {
         requestAnimationFrame(homeScreen);
         board.addEventListener("click", handleCanvasClick);
