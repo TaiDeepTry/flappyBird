@@ -131,7 +131,7 @@ window.onload = function () {
     context = board.getContext("2d");
 
     jumpSound = new Audio();
-    jumpSound.src = "./assets/sound/wing.ogg";
+    jumpSound.src = "./assets/sound/wing.wav";
 
     themeSong = new Audio();
     themeSong.src = "./assets/sound/Free Fire Battlegrounds OST  Old Theme Song.mp3"
@@ -195,7 +195,7 @@ window.onload = function () {
     flappyBirdTextImg = new Image();
     flappyBirdTextImg.src = "./assets/images/flappybirdtext.png";
 
-    themeSong.play();
+    
     drawHomeScreen();
 }
 
@@ -294,7 +294,7 @@ function update() {
 function drawMoveBackground(){
     boardX += velocityX*0.3;
     context.drawImage(boardImg1, boardX, 0, 360, 640);
-    context.drawImage(boardImg2, boardX + boardWidth , 0, 360, 640);
+    context.drawImage(boardImg2, boardX + boardWidth - 1 , 0, 360, 640);
     if(boardX < -boardWidth){
         boardX = 0
     }
@@ -393,7 +393,9 @@ function placePipe() {
 
 function birdJump(e) {
     if ((e.code === "Space" || e.code == "ArrowUp" || e.type === "touchstart") && gameOver == false) {
+        jumpSound.currentTime = 0;
         jumpSound.play();
+        
         velocityY = -6;
         birdRotation = -40;
         drawRotatedBird();
