@@ -1,12 +1,14 @@
 @font-face {
     font-family: 'Flappy-Bird-Regular';
-    src: url('./fonts/flappy-font.woff2') format('woff2'),
-         url('./fonts/flappy-font.woff') format('woff'),
-         url('./fonts/flappy-font.ttf') format('truetype');
+    src: url('./fonts/Flappy-Bird-Regular.ttf.eot') format('eot'),
+         url('./fonts/Flappy-Bird-Regular.ttf.svg') format('svg'),
+         url('./fonts/Flappy-Bird-Regular.ttf.woff') format('woff'),
+         /* url('./fonts/flappy-font.ttf') format('truetype'); */
   }
   
 body{
-    font-family: 'Flappy-Bird-Regular';
+    /* font-family: 'Flappy Bird Font Regular'; */
+    font-family: '04b_19';
     text-align: center;
     overflow: hidden;
 }
