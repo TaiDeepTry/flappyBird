@@ -57,13 +57,51 @@ let medalHeight = medalWidth;
 let medalX = 54;
 let medalY = boardHeight / 2 - medalHeight / 2 + 11;
 
-let playAgain;
-let playAgainImg;
-let playAgainWidth = 130;
-let playAgainHeight = 72.5;
-let playAgainX = boardWidth / 2 - playAgainWidth / 2;
-let playAgainY = boardHeight / 2 + 100;
-let play = false;
+let playButton;
+let playButtonImg;
+let playButtonWidth = 130;
+let playButtonHeight = 72.5;
+let playButtonX = boardWidth / 2 - playButtonWidth / 2;
+let playButtonY = boardHeight / 2 + 100;
+
+let flappyBirdText;
+let flappyBirdTextImg;
+let flappyBirdTextWidth = 250;
+let flappyBirdTextHeight = flappyBirdTextWidth * 240 / 890;
+let flappyBirdTextX = boardWidth / 2 - flappyBirdTextWidth / 2;
+let flappyBirdTextY = boardHeight / 6;
+
+over = {
+    x: overX,
+    y: overY,
+    width: overWidth,
+    height: overHeight
+}
+overText = {
+    x: overTextX,
+    y: overTextY,
+    width: overTextWidth,
+    height: overTextHeight
+}
+medal = {
+    x: medalX,
+    y: medalY,
+    width: medalWidth,
+    height: medalHeight
+}
+playButton = {
+    x: playButtonX,
+    y: playButtonY,
+    width: playButtonWidth,
+    height: playButtonHeight
+}
+
+flappyBirdText = {
+    x: flappyBirdTextX,
+    y: flappyBirdTextY,
+    width: flappyBirdTextWidth,
+    height: flappyBirdTextHeight
+}
 
 let velocityY = 0;
 let velocityX = -2;
@@ -72,8 +110,8 @@ let gameOver = false;
 let score = 0;
 let timmer = 0.8;
 let flappingStatus = 10;
-
-let jumpSound;
+let play = false;
+let inHomeScreen = true;
 
 window.onload = function () {
     // board
@@ -81,7 +119,7 @@ window.onload = function () {
     board.height = boardHeight;
     board.width = boardWidth;
     context = board.getContext("2d");
-
+    // context.clearRect();
     // draw bird
     birdImg = new Image();
     birdImg1 = new Image();
@@ -131,26 +169,46 @@ window.onload = function () {
     medalImg = new Image();
     medalImg.src = "./assets/images/goldmedal.png";
 
-    jumpSound = new Audio();
-    jumpSound.src = "./assets/sound/jump.mp3";
+    playButtonImg = new Image();
+    playButtonImg.src = "./assets/images/playbutton.png";
 
-    playAgainImg = new Image();
-    playAgainImg.src = "./assets/images/playbutton.png";
+    flappyBirdTextImg = new Image();
+    flappyBirdTextImg.src = "./assets/images/flappybirdtext.png";
 
-    // placePipe();
+
+    drawHomeScreen();
+
+}
+
+
+
+
+function gameLoop() {
     setInterval(placePipe, 1800);
     document.addEventListener("keydown", birdJump);
     document.addEventListener("touchstart", birdJump);
     board.addEventListener("click", handleCanvasClick);
-    requestAnimationFrame(update);
+    if (!inHomeScreen) {
+        requestAnimationFrame(update);
+    }
+}
+
+function drawHomeScreen() {
+    if (inHomeScreen) {
+        requestAnimationFrame(homeScreen);
+        board.addEventListener("click", handleCanvasClick);
+    }else{
+        return;
+    }
 }
 
 function update() {
 
     requestAnimationFrame(update);
-    
-    if (gameOver) {
+
+    if (gameOver || inHomeScreen) {
         play = false;
+        pipeX = 0 - pipeWidth;
         drawBoard();
         return;
     }
@@ -166,7 +224,7 @@ function update() {
 
     // draw bird
     if (!play) {
-    flappingBird(bird.x, bird.y, bird.width, bird.height);
+        flappingBird(bird.x, bird.y, bird.width, bird.height);
     }
     drawBird(play);
 
@@ -176,7 +234,7 @@ function update() {
         context.drawImage(element.img, element.x, element.y, element.width, element.height);
         element.x += velocityX;
 
-        if (!element.passed && bird.x > element.x + pipeWidth) {
+        if (!element.passed && bird.x > element.x + pipeWidth && play == true) {
             score += 0.5;
             element.passed = true;
         }
@@ -190,14 +248,14 @@ function update() {
     while (pipesArray.length > 0 && pipesArray[0].x < -pipeWidth) {
         pipesArray.shift();
     }
-
+    // draw ground 
     groundX += velocityX
     context.drawImage(groundImg, groundX, groundY, boardWidth, boardHeight / 8);
     context.drawImage(groundImg2, groundX + boardWidth, groundY, boardWidth, boardHeight / 8);
-
     if (groundX + boardWidth < 0) {
         groundX = 0
     }
+
     context.fillStyle = "black";
     context.font = "45px '04b_19'";
     context.fillText(score, (boardWidth / 2 - 45 / 2) + 2, 48);
@@ -209,6 +267,35 @@ function update() {
     context.fillText("© 2023 Nguyen Tuan Tai Dep Trai VCL. All rights reserved.", boardWidth / 9, boardHeight / 20 * 19);
 
 }
+
+function homeScreen() {
+    if(inHomeScreen){
+        requestAnimationFrame(homeScreen);
+    }
+    context.clearRect(0, 0, boardWidth, boardHeight);
+
+
+    // draw bird
+    context.drawImage(flappyBirdTextImg, flappyBirdText.x, flappyBirdText.y, flappyBirdText.width, flappyBirdText.height);
+    flappingBird(boardWidth / 2 - bird.width, boardHeight / 8 * 3, bird.width * 1.5, bird.height * 1.5);
+
+    // draw ground
+    groundX += velocityX
+    context.drawImage(groundImg, groundX, groundY, boardWidth, boardHeight / 8);
+    context.drawImage(groundImg2, groundX + boardWidth, groundY, boardWidth, boardHeight / 8);
+    if (groundX + boardWidth < 0) {
+        groundX = 0;
+    }
+
+    context.drawImage(playButtonImg, boardWidth / 2 - playButton.width / 1.6, playButton.y, playButton.width * 1.3, playButton.height * 1.3);
+
+    if (!inHomeScreen) {
+        context.clearRect(0, 0, boardWidth, boardHeight);
+        return;
+    }
+}
+
+
 function drawBird(isPlay) {
     if (isPlay) {
         birdRotation += 1.5;
@@ -219,15 +306,15 @@ function drawBird(isPlay) {
 }
 
 
-function flappingBird(x, y, width, height){
+function flappingBird(x, y, width, height) {
     flappingStatus += timmer;
-    if(0 <= flappingStatus && flappingStatus < 10){
+    if (0 <= flappingStatus && flappingStatus < 10) {
         context.drawImage(birdImg1, x, y, width, height);
-    }else if( 10 <= flappingStatus && flappingStatus < 20){
+    } else if (10 <= flappingStatus && flappingStatus < 20) {
         context.drawImage(birdImg2, x, y, width, height);
-    }else if (flappingStatus >= 20 && flappingStatus <= 30){
+    } else if (flappingStatus >= 20 && flappingStatus <= 30) {
         context.drawImage(birdImg3, x, y, width, height);
-    }else{
+    } else {
         context.drawImage(birdImg1, x, y, width, height);
         flappingStatus = 0;
     }
@@ -239,10 +326,10 @@ function placePipe() {
         drawBoard();
         return;
     }
-    if(play){
-        pipeX = boardWidth; 
-    }else{
-        score = -1;    
+    if (play) {
+        pipeX = boardWidth;
+    } else {
+        score = 0;
     }
 
     let randomPipeY = pipeY - pipeHeight / 4 - Math.random(0.4, 0, 6) * (pipeHeight / 2);
@@ -273,24 +360,19 @@ function placePipe() {
 
 function birdJump(e) {
     if ((e.code === "Space" || e.code == "ArrowUp" || e.type === "touchstart") && gameOver == false) {
-        jumpSound.play();
         velocityY = -6;
         birdRotation = -40;
         drawRotatedBird();
         play = true;
-        jumpSound.currentTime = 0;
     }
 }
 
 function handleCanvasClick(event) {
-    // Lấy tọa độ của điểm click trên canvas
     const rect = board.getBoundingClientRect();
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
 
-    // Kiểm tra xem điểm click có nằm trong vùng hình ảnh playAgain hay không
-    if (x > playAgain.x && x < playAgain.x + playAgain.width && y > playAgain.y && y < playAgain.y + playAgain.height) {
-        // Thực hiện hành động khi click vào hình ảnh playAgain ở đây
+    if (x > playButton.x && x < playButton.x + playButton.width && y > playButton.y && y < playButton.y + playButton.height) {
         if (gameOver) {
             bird.y = birdY;
             pipesArray = [];
@@ -298,40 +380,20 @@ function handleCanvasClick(event) {
             gameOver = false;
             play = false;
             velocityY = 0;
-            if(play){
-                pipeX = boardWidth; 
-            }else{
-                score = 0;    
+            if (play) {
+                pipeX = boardWidth;
+            } else {
+                score = 0;
             }
+        }
+        else if (inHomeScreen) {
+            inHomeScreen = false;
+            gameLoop();
         }
     }
 }
 
 function drawBoard() {
-    over = {
-        x: overX,
-        y: overY,
-        width: overWidth,
-        height: overHeight
-    }
-    overText = {
-        x: overTextX,
-        y: overTextY,
-        width: overTextWidth,
-        height: overTextHeight
-    }
-    medal = {
-        x: medalX,
-        y: medalY,
-        width: medalWidth,
-        height: medalHeight
-    }
-    playAgain = {
-        x: playAgainX,
-        y: playAgainY,
-        width: playAgainWidth,
-        height: playAgainHeight
-    }
     context.drawImage(overImg, over.x, over.y, over.width, over.height);
     context.drawImage(overTextImg, overTextX, overTextY, overTextWidth, overTextHeight);
     context.drawImage(medalImg, medal.x, medal.y, medal.width, medal.height);
@@ -341,7 +403,7 @@ function drawBoard() {
     context.font = "25px '04b_19'";
     context.strokeText(score, boardWidth / 2 + 100, boardHeight / 2 - 13);
     context.fillText(score, boardWidth / 2 + 100, boardHeight / 2 - 13);
-    context.drawImage(playAgainImg, playAgain.x, playAgain.y, playAgain.width, playAgain.height);
+    context.drawImage(playButtonImg, playButton.x, playButton.y, playButton.width, playButton.height);
 }
 
 function detectCollision(bird, pipe) {
@@ -356,6 +418,6 @@ function drawRotatedBird() {
     context.translate(bird.x + bird.width / 2, bird.y + bird.height / 2);
     context.rotate(birdRotation * Math.PI / 180);
     board.style.imageEendering = 'auto';
-    flappingBird(-bird.width / 2, -bird.height / 2, bird.width, bird.height);// context.drawImage(birdImg, -bird.width / 2, -bird.height / 2, bird.width, bird.height);
+    flappingBird(-bird.width / 2, -bird.height / 2, bird.width, bird.height);
     context.restore();
 }

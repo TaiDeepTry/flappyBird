@@ -1,5 +1,8 @@
-@import url(./fonts/flappy-font.ttf);
-
+@font-face {
+    font-family: 'Flappy-Bird-Regular';
+    src: url('./fonts/flappy-font.ttf') format('truetype');
+  }
+  
 body{
     font-family: 'Flappy-Bird-Regular';
     text-align: center;
