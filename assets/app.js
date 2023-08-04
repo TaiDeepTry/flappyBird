@@ -1,5 +1,9 @@
 //board
 let board;
+let boardX = 0;
+let boardY;
+let boardImg1;
+let boardImg2;
 let boardHeight = 640;
 let boardWidth = 360;
 let context;
@@ -11,7 +15,10 @@ let birdHeight = 24;
 let birdX = boardWidth / 8;
 let birdY = boardHeight / 2;
 let birdRotation = 0;
-
+let birdImg;
+let birdImg1;
+let birdImg2;
+let birdImg3;
 let bird = {
     x: birdX,
     y: birdY,
@@ -113,13 +120,26 @@ let flappingStatus = 10;
 let play = false;
 let inHomeScreen = true;
 
+let jumpSound;
+let themeSong;
+
 window.onload = function () {
     // board
     board = document.getElementById("board");
     board.height = boardHeight;
     board.width = boardWidth;
     context = board.getContext("2d");
-    // context.clearRect();
+
+    jumpSound = new Audio();
+    jumpSound.src = "./assets/sound/wing.ogg";
+
+    themeSong = new Audio();
+    themeSong.src = "./assets/sound/Free Fire Battlegrounds OST  Old Theme Song.mp3"
+
+    boardImg1 = new Image();
+    boardImg1.src = "./assets/images/flappybirdbg.png";
+    boardImg2 = new Image();
+    boardImg2.src = "./assets/images/flappybirdbg.png";
     // draw bird
     birdImg = new Image();
     birdImg1 = new Image();
@@ -175,9 +195,8 @@ window.onload = function () {
     flappyBirdTextImg = new Image();
     flappyBirdTextImg.src = "./assets/images/flappybirdtext.png";
 
-    
+    themeSong.play();
     drawHomeScreen();
-
 }
 
 
@@ -193,8 +212,9 @@ function gameLoop() {
         requestAnimationFrame(update);
     }
 }
+
 function increaseSpeed(){
-    velocityX -= 0.01;
+    velocityX -= 0.02;
 }
 
 function drawHomeScreen() {
@@ -219,7 +239,7 @@ function update() {
 
 
     context.clearRect(0, 0, boardWidth, boardHeight);
-
+    drawMoveBackground();
 
     // neu chim cham san thi thua
     if (bird.y > board.height / 8 * 7) {
@@ -271,12 +291,21 @@ function update() {
     }
 
 }
+function drawMoveBackground(){
+    boardX += velocityX*0.3;
+    context.drawImage(boardImg1, boardX, 0, 360, 640);
+    context.drawImage(boardImg2, boardX + boardWidth , 0, 360, 640);
+    if(boardX < -boardWidth){
+        boardX = 0
+    }
+}
 
 function homeScreen() {
     if (inHomeScreen) {
         requestAnimationFrame(homeScreen);
     }
     context.clearRect(0, 0, boardWidth, boardHeight);
+    drawMoveBackground();
 
 
     // draw bird
@@ -364,6 +393,7 @@ function placePipe() {
 
 function birdJump(e) {
     if ((e.code === "Space" || e.code == "ArrowUp" || e.type === "touchstart") && gameOver == false) {
+        jumpSound.play();
         velocityY = -6;
         birdRotation = -40;
         drawRotatedBird();

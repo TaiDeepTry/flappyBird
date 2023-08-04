@@ -6,7 +6,7 @@ body{
     overflow: hidden;
 }
 #board{
-    background-image: url("./images/flappybirdbg.png");
+    /* background-image: url("./images/flappybirdbg.png"); */
     background-repeat: no-repeat;
     background-size: contain;
     image-rendering: pixelated;
