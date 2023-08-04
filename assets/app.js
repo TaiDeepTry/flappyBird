@@ -175,7 +175,7 @@ window.onload = function () {
     flappyBirdTextImg = new Image();
     flappyBirdTextImg.src = "./assets/images/flappybirdtext.png";
 
-
+    
     drawHomeScreen();
 
 }
@@ -184,6 +184,7 @@ window.onload = function () {
 
 
 function gameLoop() {
+    setInterval(increaseSpeed, 1000);
     setInterval(placePipe, 1800);
     document.addEventListener("keydown", birdJump);
     document.addEventListener("touchstart", birdJump);
@@ -192,12 +193,15 @@ function gameLoop() {
         requestAnimationFrame(update);
     }
 }
+function increaseSpeed(){
+    velocityX -= 0.01;
+}
 
 function drawHomeScreen() {
     if (inHomeScreen) {
         requestAnimationFrame(homeScreen);
         board.addEventListener("click", handleCanvasClick);
-    }else{
+    } else {
         return;
     }
 }
@@ -256,20 +260,20 @@ function update() {
         groundX = 0
     }
 
-    context.fillStyle = "black";
-    context.font = "45px 'Flappy Bird'";
-    context.fillText(score, (boardWidth / 2 - 45 / 2) + 2, 48);
-    context.fillStyle = "white";
-    context.font = "45px 'Flappy Bird'";
-    context.fillText(score, boardWidth / 2 - 45 / 2, 46);
-    context.font = "10px 'Flappy Bird'";
-    context.fillStyle = "black";
-    context.fillText("© 2023 Nguyen Tuan Tai Dep Trai VCL. All rights reserved.", boardWidth / 9, boardHeight / 20 * 19);
+    let scoreStr = Math.floor(score).toString();
+    let digitWidth = 20; // Độ rộng của mỗi hình ảnh số
+
+    for (let i = 0; i < scoreStr.length; i++) {
+        let digit = scoreStr.charAt(i);
+        let digitImg = new Image();
+        digitImg.src = "./assets/images/" + digit + ".png";
+        context.drawImage(digitImg, 10 + i * digitWidth, 10, digitWidth, 30);
+    }
 
 }
 
 function homeScreen() {
-    if(inHomeScreen){
+    if (inHomeScreen) {
         requestAnimationFrame(homeScreen);
     }
     context.clearRect(0, 0, boardWidth, boardHeight);
@@ -380,6 +384,7 @@ function handleCanvasClick(event) {
             gameOver = false;
             play = false;
             velocityY = 0;
+            velocityX = -2;
             if (play) {
                 pipeX = boardWidth;
             } else {
@@ -397,12 +402,15 @@ function drawBoard() {
     context.drawImage(overImg, over.x, over.y, over.width, over.height);
     context.drawImage(overTextImg, overTextX, overTextY, overTextWidth, overTextHeight);
     context.drawImage(medalImg, medal.x, medal.y, medal.width, medal.height);
-    context.strokeStyle = "black";
-    context.lineWidth = 3;
-    context.fillStyle = "white";
-    context.font = "25px '04b_19'";
-    context.strokeText(score, boardWidth / 2 + 100, boardHeight / 2 - 13);
-    context.fillText(score, boardWidth / 2 + 100, boardHeight / 2 - 13);
+    let scoreStr = score.toString();
+    let digitWidth = 20;
+    for (let i = 0; i < scoreStr.length; i++) {
+        let digit = scoreStr.charAt(i);
+        let digitImg = new Image();
+        digitImg.src = "./assets/images/" + digit + ".png";
+        context.drawImage(digitImg, boardWidth / 2 + 100 + i * digitWidth, boardHeight / 2 - 30  , digitWidth, 30);
+    }
+
     context.drawImage(playButtonImg, playButton.x, playButton.y, playButton.width, playButton.height);
 }
 

@@ -1,13 +1,6 @@
-@font-face {
-    font-family: 'Flappy-Bird-Regular';
-    src: url('./fonts/Flappy-Bird-Regular.ttf.eot') format('eot'),
-         url('./fonts/Flappy-Bird-Regular.ttf.svg') format('svg'),
-         url('./fonts/Flappy-Bird-Regular.ttf.woff') format('woff'),
-         /* url('./fonts/flappy-font.ttf') format('truetype'); */
-  }
-  
+@import url('https://fonts.googleapis.com/css2?family=Handjet&display=swap');
 body{
-    font-family: 'Flappy Bird';
+    font-family: 'Handjet';
     /* font-family: '04b_19'; */
     text-align: center;
     overflow: hidden;
@@ -17,4 +10,9 @@ body{
     background-repeat: no-repeat;
     background-size: contain;
     image-rendering: pixelated;
+
+}
+.creator{
+    font-weight: bold;
+    font-size: 1.2rem;
 }
