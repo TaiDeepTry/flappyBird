@@ -1,6 +1,8 @@
 @font-face {
     font-family: 'Flappy-Bird-Regular';
-    src: url('./fonts/flappy-font.ttf') format('truetype');
+    src: url('./fonts/flappy-font.woff2') format('woff2'),
+         url('./fonts/flappy-font.woff') format('woff'),
+         url('./fonts/flappy-font.ttf') format('truetype');
   }
   
 body{
