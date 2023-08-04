@@ -218,7 +218,6 @@ function increaseSpeed(){
 }
 
 function drawHomeScreen() {
-    themeSong.play();
     if (inHomeScreen) {
         requestAnimationFrame(homeScreen);
         board.addEventListener("click", handleCanvasClick);
@@ -394,9 +393,6 @@ function placePipe() {
 
 function birdJump(e) {
     if ((e.code === "Space" || e.code == "ArrowUp" || e.type === "touchstart") && gameOver == false) {
-        jumpSound.currentTime = 0;
-        jumpSound.play();
-        
         velocityY = -6;
         birdRotation = -40;
         drawRotatedBird();
