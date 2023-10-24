@@ -16,19 +16,15 @@ let birdX = boardWidth / 8;
 let birdY = boardHeight / 2;
 let birdRotation = 0;
 let birdImg;
-let birdImg1;
-let birdImg2;
-let birdImg3;
-let bird = {
-    x: birdX,
-    y: birdY,
-    width: birdWidth,
-    height: birdHeight
-}
+let birdFlap1;
+let birdFlap2;
+let birdFlap3;
+let bird = {}
 
 
 // pipes
 let pipesArray = [];
+let birdsArray = [];
 let pipeWidth = 64;
 let pipeHeight = 412;
 let pipeX = 0 - pipeWidth;
@@ -36,7 +32,7 @@ let pipeY = 0;
 let topPipeImg;
 let bottomPipeImg;
 
-//ground
+
 let groundsArray = [];
 let groundImg;
 let groundImg2;
@@ -78,6 +74,13 @@ let flappyBirdTextHeight = flappyBirdTextWidth * 240 / 890;
 let flappyBirdTextX = boardWidth / 2 - flappyBirdTextWidth / 2;
 let flappyBirdTextY = boardHeight / 6;
 
+let menuButton;
+let menuButtonImg;
+let menuButtonWidth = 100;
+let menuButtonHeight = 100 / 360 * 126;
+let menuButtonX = boardWidth / 2 - menuButtonWidth / 2;
+let menuButtonY = boardHeight / 6 * 5 - 20;
+
 over = {
     x: overX,
     y: overY,
@@ -110,6 +113,13 @@ flappyBirdText = {
     height: flappyBirdTextHeight
 }
 
+menuButton = {
+    x: menuButtonX,
+    y: menuButtonY,
+    width: menuButtonWidth,
+    height: menuButtonHeight
+}
+
 let velocityY = 0;
 let velocityX = -2;
 let gravity = 0.3;
@@ -121,7 +131,79 @@ let play = false;
 let inHomeScreen = true;
 
 let jumpSound;
-let themeSong;
+
+let birdsList = [
+    {
+        name: "Yellow Bird",
+        width: birdWidth,
+        height: birdHeight,
+        x: birdX,
+        y: birdY,
+        images: {
+            image1: "./assets/images/bird1.png",
+            image2: "./assets/images/bird2.png",
+            image3: "./assets/images/bird3.png"
+        },
+        velocityY: velocityY,
+        play: play
+    },
+    {
+        name: "Blue Bird",
+        width: birdWidth,
+        height: birdHeight,
+        x: birdX,
+        y: birdY,
+        images: {
+            image1: "./assets/images/blue_bird1.png",
+            image2: "./assets/images/blue_bird2.png",
+            image3: "./assets/images/blue_bird3.png"
+        },
+        velocityY: velocityY,
+        play: play
+    },
+    {
+        name: "Red Bird",
+        width: birdWidth,
+        height: birdHeight,
+        x: birdX,
+        y: birdY,
+        images: {
+            image1: "./assets/images/red_bird1.png",
+            image2: "./assets/images/red_bird2.png",
+            image3: "./assets/images/red_bird3.png"
+        },
+        velocityY: velocityY,
+        play: play
+    },
+    {
+        name: "Owl",
+        width: birdWidth + 50,
+        height: birdWidth + 50,
+        x: birdX,
+        y: birdY,
+        images: {
+            image1: "./assets/images/naruto1.png",
+            image2: "./assets/images/naruto2.png",
+            image3: "./assets/images/naruto3.png"
+        },
+        velocityY: velocityY,
+        play: play
+    }
+];
+
+
+function selectBird(index) {
+    if (index >= 0 && index < birdsList.length) {
+        console.log(`Selected bird: ${birdsList[index].name}`);
+        return birdsList[index];
+    } else {
+        console.log("Invalid bird index.");
+    }
+}
+
+
+bird = selectBird(0);
+
 
 window.onload = function () {
     // board
@@ -133,35 +215,33 @@ window.onload = function () {
     jumpSound = new Audio();
     jumpSound.src = "./assets/sound/wing.wav";
 
-    themeSong = new Audio();
-    themeSong.src = "./assets/sound/Free Fire Battlegrounds OST  Old Theme Song.mp3"
-
     boardImg1 = new Image();
-    boardImg1.src = "./assets/images/flappybirdbg.png";
     boardImg2 = new Image();
+    boardImg1.src = "./assets/images/flappybirdbg.png";
     boardImg2.src = "./assets/images/flappybirdbg.png";
+
     // draw bird
     birdImg = new Image();
-    birdImg1 = new Image();
-    birdImg2 = new Image();
-    birdImg3 = new Image();
+    birdFlap1 = new Image();
+    birdFlap2 = new Image();
+    birdFlap3 = new Image();
 
-    birdImg.src = "./assets/images/bird2.png"
+    birdImg.src = bird.images.image2.toString();
     birdImg.onload = function () {
         context.drawImage(birdImg, bird.x, bird.y, birdWidth, birdHeight);
     };
 
-    birdImg1.src = "./assets/images/bird1.png"
-    birdImg1.onload = function () {
-        context.drawImage(birdImg1, bird.x, bird.y, bird.width, bird.height);
+    birdFlap1.src = bird.images.image1.toString();
+    birdFlap1.onload = function () {
+        context.drawImage(birdFlap1, bird.x, bird.y, bird.width, bird.height);
     }
-    birdImg2.src = "./assets/images/bird2.png"
-    birdImg2.onload = function () {
-        context.drawImage(birdImg2, bird.x, bird.y, bird.width, bird.height);
+    birdFlap2.src = bird.images.image2.toString();
+    birdFlap2.onload = function () {
+        context.drawImage(birdFlap2, bird.x, bird.y, bird.width, bird.height);
     }
-    birdImg3.src = "./assets/images/bird3.png"
-    birdImg3.onload = function () {
-        context.drawImage(birdImg3, bird.x, bird.y, bird.width, bird.height);
+    birdFlap3.src = bird.images.image3.toString();
+    birdFlap3.onload = function () {
+        context.drawImage(birdFlap3, bird.x, bird.y, bird.width, bird.height);
     }
 
     // draw pipe
@@ -177,8 +257,7 @@ window.onload = function () {
     groundImg.src = "./assets/images/ground.png"
 
     groundImg2 = new Image();
-    groundImg2.src = "./assets/images/ground2.png"
-
+    groundImg2.src = "./assets/images/ground2.png";
 
     overImg = new Image();
     overImg.src = "./assets/images/board.png";
@@ -195,10 +274,11 @@ window.onload = function () {
     flappyBirdTextImg = new Image();
     flappyBirdTextImg.src = "./assets/images/flappybirdtext.png";
 
-    
+    menuButtonImg = new Image();
+    menuButtonImg.src = "./assets/images/menu.png";
+
     drawHomeScreen();
 }
-
 
 
 
@@ -210,10 +290,13 @@ function gameLoop() {
     board.addEventListener("click", handleCanvasClick);
     if (!inHomeScreen) {
         requestAnimationFrame(update);
+        
+    }else{
+        return; 
     }
 }
 
-function increaseSpeed(){
+function increaseSpeed() {
     velocityX -= 0.02;
 }
 
@@ -281,7 +364,7 @@ function update() {
     }
 
     let scoreStr = Math.floor(score).toString();
-    let digitWidth = 20; // Độ rộng của mỗi hình ảnh số
+    let digitWidth = 20;
 
     for (let i = 0; i < scoreStr.length; i++) {
         let digit = scoreStr.charAt(i);
@@ -291,11 +374,11 @@ function update() {
     }
 
 }
-function drawMoveBackground(){
-    boardX += velocityX*0.3;
+function drawMoveBackground() {
+    boardX += velocityX * 0.3;
     context.drawImage(boardImg1, boardX, 0, 360, 640);
-    context.drawImage(boardImg2, boardX + boardWidth - 1 , 0, 360, 640);
-    if(boardX < -boardWidth){
+    context.drawImage(boardImg2, boardX + boardWidth - 1, 0, 360, 640);
+    if (boardX < -boardWidth) {
         boardX = 0
     }
 }
@@ -324,9 +407,14 @@ function homeScreen() {
 
     if (!inHomeScreen) {
         context.clearRect(0, 0, boardWidth, boardHeight);
+        console.log("let play");
+        return;
+    }else{
+        console.log("back to home screen");
         return;
     }
 }
+
 
 
 function drawBird(isPlay) {
@@ -342,13 +430,13 @@ function drawBird(isPlay) {
 function flappingBird(x, y, width, height) {
     flappingStatus += timmer;
     if (0 <= flappingStatus && flappingStatus < 10) {
-        context.drawImage(birdImg1, x, y, width, height);
+        context.drawImage(birdFlap1, x, y, width, height);
     } else if (10 <= flappingStatus && flappingStatus < 20) {
-        context.drawImage(birdImg2, x, y, width, height);
+        context.drawImage(birdFlap2, x, y, width, height);
     } else if (flappingStatus >= 20 && flappingStatus <= 30) {
-        context.drawImage(birdImg3, x, y, width, height);
+        context.drawImage(birdFlap3, x, y, width, height);
     } else {
-        context.drawImage(birdImg1, x, y, width, height);
+        context.drawImage(birdFlap1, x, y, width, height);
         flappingStatus = 0;
     }
 }
@@ -365,7 +453,7 @@ function placePipe() {
         score = 0;
     }
 
-    let randomPipeY = pipeY - pipeHeight / 4 - Math.random(0.4, 0, 6) * (pipeHeight / 2);
+    let randomPipeY = pipeY - pipeHeight / 4 - Math.random(0.4, 0.6) * (pipeHeight / 2);
     openingSpace = board.height / 4;
     let topPipe = {
         img: topPipeImg,
@@ -392,13 +480,17 @@ function placePipe() {
 }
 
 function birdJump(e) {
-    if ((e.code === "Space" || e.code == "ArrowUp" || e.type === "touchstart") && gameOver == false) {
+
+    if ((e.code === "Space" || e.code == "ArrowUp" || e.type == "touchstart") && gameOver == false) {
+        jumpSound.currentTime = 0;
+        jumpSound.play();
         velocityY = -6;
         birdRotation = -40;
         drawRotatedBird();
         play = true;
     }
 }
+
 
 function handleCanvasClick(event) {
     const rect = board.getBoundingClientRect();
@@ -425,19 +517,29 @@ function handleCanvasClick(event) {
             gameLoop();
         }
     }
+
+    if (x > menuButton.x && x < menuButton.x + menuButton.width && menuButton.y && menuButton.y + menuButton.height) {
+        if (gameOver && !inHomeScreen) {
+            inHomeScreen = true; 
+            drawHomeScreen();
+        }
+    }
+
 }
 
 function drawBoard() {
     context.drawImage(overImg, over.x, over.y, over.width, over.height);
     context.drawImage(overTextImg, overTextX, overTextY, overTextWidth, overTextHeight);
     context.drawImage(medalImg, medal.x, medal.y, medal.width, medal.height);
+    context.drawImage(menuButtonImg, menuButton.x, menuButton.y, menuButton.width, menuButton.height);
+
     let scoreStr = score.toString();
     let digitWidth = 20;
     for (let i = 0; i < scoreStr.length; i++) {
         let digit = scoreStr.charAt(i);
         let digitImg = new Image();
         digitImg.src = "./assets/images/" + digit + ".png";
-        context.drawImage(digitImg, boardWidth / 2 + 100 + i * digitWidth, boardHeight / 2 - 30  , digitWidth, 30);
+        context.drawImage(digitImg, boardWidth / 2 + 100 + i * digitWidth, boardHeight / 2 - 30, digitWidth, 30);
     }
 
     context.drawImage(playButtonImg, playButton.x, playButton.y, playButton.width, playButton.height);
@@ -449,6 +551,7 @@ function detectCollision(bird, pipe) {
         bird.y < pipe.y + pipe.height &&
         bird.y + bird.height > pipe.y;
 }
+
 
 function drawRotatedBird() {
     context.save();
