@@ -518,12 +518,12 @@ function handleCanvasClick(event) {
         }
     }
 
-    if (x > menuButton.x && x < menuButton.x + menuButton.width && menuButton.y && menuButton.y + menuButton.height) {
-        if (gameOver && !inHomeScreen) {
-            inHomeScreen = true; 
-            drawHomeScreen();
-        }
-    }
+    // if (x > menuButton.x && x < menuButton.x + menuButton.width && menuButton.y && menuButton.y + menuButton.height) {
+    //     if (gameOver && !inHomeScreen) {
+    //         inHomeScreen = true; 
+    //         drawHomeScreen();
+    //     }
+    // }
 
 }
 
@@ -531,7 +531,7 @@ function drawBoard() {
     context.drawImage(overImg, over.x, over.y, over.width, over.height);
     context.drawImage(overTextImg, overTextX, overTextY, overTextWidth, overTextHeight);
     context.drawImage(medalImg, medal.x, medal.y, medal.width, medal.height);
-    context.drawImage(menuButtonImg, menuButton.x, menuButton.y, menuButton.width, menuButton.height);
+    // context.drawImage(menuButtonImg, menuButton.x, menuButton.y, menuButton.width, menuButton.height);
 
     let scoreStr = score.toString();
     let digitWidth = 20;
